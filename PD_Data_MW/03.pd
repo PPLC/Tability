@@ -1,0 +1,15 @@
+#N canvas 2053 71 811 633 10;
+#X msg 181 167 10;
+#X msg 233 169 5;
+#X obj 196 233 +;
+#X floatatom 198 286 5 0 0 0 - - -;
+#X obj 87 8 bng 15 250 50 0 empty empty empty 17 7 0 10 -262144 -1
+-1;
+#X obj 193 86 trigger;
+#X obj 195 127 t b b;
+#X connect 0 0 2 0;
+#X connect 1 0 2 1;
+#X connect 2 0 3 0;
+#X connect 4 0 6 0;
+#X connect 6 0 0 0;
+#X connect 6 1 1 0;
