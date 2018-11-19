@@ -1,9 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <QCARConfig xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="qcar_config.xsd">
   <Tracking>
+    <ImageTarget name="TagDerMedien_S01_3" size="15.000000 21.281464" />
+    <ImageTarget name="TagDerMedien_S01" size="20.000000 28.375286" />
+    <ImageTarget name="TagDerMedien_S01_1" size="15.000000 21.281464" />
     <ImageTarget name="TagDerMedien_S36" size="20.000000 28.375286" />
     <ImageTarget name="TagDerMedien_S20" size="20.000000 28.375286" />
     <ImageTarget name="TagDerMedien_S02" size="20.000000 28.375286" />
-    <ImageTarget name="TagDerMedien_S01" size="20.000000 28.375286" />
   </Tracking>
 </QCARConfig>
