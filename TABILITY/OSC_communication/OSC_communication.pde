@@ -22,7 +22,7 @@ OpenCV opencv;
 float r1;
 float g1;
 float b1;
-
+int count;
 void setup() {
   size(800, 600);
   background(0);
@@ -35,8 +35,8 @@ void setup() {
   
   // Camera Zeug
   String[] cameras = Capture.list();
-  //printArray(cameras);
-  video = new Capture(this, cameras[camera]);
+  printArray(cameras);
+  video = new Capture(this, cameras[1]);
   video.start();
 }
 
@@ -45,18 +45,25 @@ void draw() {
   video.loadPixels();
   image(video, 0,0);
   
+
   for (int x = 0; x < video.width; x++ ) {
     for (int y = 0; y < video.height; y++ ) {
-      int loc = x + y * video.width;
-      
+
+      count=0; 
       // What is current color
-      color currentColor = video.pixels[loc];
-        r1 = red(currentColor);
-        g1 = green(currentColor);
-        b1 = blue(currentColor);
+      color currentColor = video.pixels[count];
+      r1 = red(currentColor);
+      g1 = green(currentColor);
+      b1 = blue(currentColor);
+      count++;
+      if (count > (video.width*video.height)) {
+        count = 0;
       }
     }
-    
+  }
+
+  println("Red: " + r1 + " Blue: " + b1 + " Green: " + g1);
+
     //println(" red: " + r1 + " green: " + g1 + " blue:" + b1);
   
   if((r1 > g1) && (r1 > b1)){
@@ -71,8 +78,6 @@ void draw() {
   
   
   // OSC zeug
-    //udpSend.send("0");
-  //OscMessage msg = new OscMessage("/testFloat/value");
   OscMessage msg = new OscMessage("");
   
   msg = new OscMessage("/null/r1");
