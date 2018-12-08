@@ -3,16 +3,16 @@ import processing.video.*;
 Capture video;
 
 color trackColor; 
-float threshold = 20;
-float distThreshold = 75;
+float threshold = 25;
+float distThreshold = 50;
 
 ArrayList<Blob> blobs = new ArrayList<Blob>();
 
 void setup() {
-  size(100, 100);
+  size(640, 360);
   String[] cameras = Capture.list();
   printArray(cameras);
-  video = new Capture(this, cameras[3]);
+  video = new Capture(this, 640, 360);
   video.start();
   trackColor = color(255, 0, 0);
 }
@@ -23,10 +23,17 @@ void captureEvent(Capture video) {
 
 void keyPressed() {
   if (key == 'a') {
-    distThreshold++;
+    distThreshold+=5;
   } else if (key == 'z') {
-    distThreshold--;
+    distThreshold-=5;
   }
+  if (key == 's') {
+    threshold+=5;
+  } else if (key == 'x') {
+    threshold-=5;
+  }
+
+
   println(distThreshold);
 }
 
@@ -36,8 +43,6 @@ void draw() {
 
   blobs.clear();
 
-  //threshold = map(mouseX, 0, width, 0, 100);
-  threshold = 80;
 
   // Begin loop to walk through every pixel
   for (int x = 0; x < video.width; x++ ) {
@@ -68,7 +73,6 @@ void draw() {
         if (!found) {
           Blob b = new Blob(x, y);
           blobs.add(b);
-          b.getPixel();
         }
       }
     }
@@ -79,9 +83,15 @@ void draw() {
       b.show();
     }
   }
+
+  textAlign(RIGHT);
+  fill(0);
+  text("distance threshold: " + distThreshold, width-10, 25);
+  text("color threshold: " + threshold, width-10, 50);
 }
 
 
+// Custom distance functions w/ no square root for optimization
 float distSq(float x1, float y1, float x2, float y2) {
   float d = (x2-x1)*(x2-x1) + (y2-y1)*(y2-y1);
   return d;
