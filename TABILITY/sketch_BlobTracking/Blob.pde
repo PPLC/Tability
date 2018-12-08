@@ -28,7 +28,6 @@ class Blob {
     }
   }
 
-
   void add(float x, float y) {
     points.add(new PVector(x, y));
     minx = min(minx, x);
@@ -63,4 +62,9 @@ class Blob {
       return false;
     }
   }
+  
+  void getPixel() {
+    println("X:" + minx, "Y:" + maxy);
+  }
+  
 }

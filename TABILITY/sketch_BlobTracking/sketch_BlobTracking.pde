@@ -81,6 +81,7 @@ void draw() {
   for (Blob b : blobs) {
     if (b.size() > 500) {
       b.show();
+      b.getPixel();
     }
   }
 
