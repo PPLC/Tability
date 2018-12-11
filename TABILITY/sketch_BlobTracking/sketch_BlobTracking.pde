@@ -93,7 +93,7 @@ void draw() {
    //println(" red: " + r1 + " green: " + g1 + " blue:" + b1);
    */
 
-  blobs.clear();
+  // blobs.clear(); don't need this for multiple color blobbing
 
 
   // Begin loop to walk through every pixel
