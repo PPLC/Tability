@@ -197,8 +197,9 @@ void mousePressed() {
   //colorMode(HSB,360,100,100);
   //color c = color(0,100,50);
 
-  // float r1 = red(trackColor);
-  // float g1 = green(trackColor);
-  // float b1 = blue(trackColor);
-  //println(r1 + " " + g1 + " " + b1);
+  //RGB-Output for every single Blob per color that is clicked
+  float r1 = red(trackColor);
+  float g1 = green(trackColor);
+  float b1 = blue(trackColor);
+  println(r1 + " " + g1 + " " + b1);
 }
