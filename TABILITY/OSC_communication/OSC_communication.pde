@@ -36,7 +36,7 @@ void setup() {
   // Camera Zeug
   String[] cameras = Capture.list();
   printArray(cameras);
-  video = new Capture(this, cameras[1]);
+  video = new Capture(this, cameras[112]);
   video.start();
 }
 
