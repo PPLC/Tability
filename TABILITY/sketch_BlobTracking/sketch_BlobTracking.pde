@@ -126,6 +126,7 @@ void draw() {
       }
     }
   }
+  println("Red: " + r1 + " Blue: " + b1 + " Green: " + g1);
 
   // OSC zeug
   OscMessage msg = new OscMessage("");
