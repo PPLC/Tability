@@ -38,11 +38,49 @@
 		"subpatcher_template" : "",
 		"boxes" : [ 			{
 				"box" : 				{
+					"id" : "obj-12",
+					"maxclass" : "comment",
+					"numinlets" : 1,
+					"numoutlets" : 0,
+					"patching_rect" : [ 77.5, 20.0, 155.0, 20.0 ],
+					"style" : "",
+					"text" : "muss noch ersetzt werden\n"
+				}
+
+			}
+, 			{
+				"box" : 				{
+					"id" : "obj-9",
+					"linecount" : 3,
+					"maxclass" : "comment",
+					"numinlets" : 1,
+					"numoutlets" : 0,
+					"patching_rect" : [ 302.615387, 618.5, 150.0, 47.0 ],
+					"style" : "",
+					"text" : "bitte den Sound noch ändern, ich habe welche mit in git gepackt"
+				}
+
+			}
+, 			{
+				"box" : 				{
+					"id" : "obj-7",
+					"linecount" : 2,
+					"maxclass" : "comment",
+					"numinlets" : 1,
+					"numoutlets" : 0,
+					"patching_rect" : [ 319.5, 91.0, 150.0, 47.0 ],
+					"style" : "",
+					"text" : "Position X und Y des Böobs\n"
+				}
+
+			}
+, 			{
+				"box" : 				{
 					"id" : "obj-33",
 					"maxclass" : "comment",
 					"numinlets" : 1,
 					"numoutlets" : 0,
-					"patching_rect" : [ 1036.0, 211.5, 150.0, 33.0 ],
+					"patching_rect" : [ 1036.0, 211.5, 150.0, 20.0 ],
 					"style" : "",
 					"text" : "all dem DMX Voodoo\n"
 				}
@@ -54,7 +92,7 @@
 					"maxclass" : "newobj",
 					"numinlets" : 4,
 					"numoutlets" : 2,
-					"outlettype" : [ "FullPacket", "jit_matrix" ],
+					"outlettype" : [ "", "jit_matrix" ],
 					"patcher" : 					{
 						"fileversion" : 1,
 						"appversion" : 						{
@@ -183,9 +221,9 @@
 									"fontsize" : 13.0,
 									"id" : "obj-88",
 									"maxclass" : "newobj",
-									"numinlets" : 4,
+									"numinlets" : 2,
 									"numoutlets" : 1,
-									"outlettype" : [ "FullPacket" ],
+									"outlettype" : [ "" ],
 									"patching_rect" : [ 179.5, 294.652161, 110.0, 23.0 ],
 									"style" : "",
 									"text" : "lcudp-pack 254 0"
@@ -592,9 +630,9 @@
 					"maxclass" : "comment",
 					"numinlets" : 1,
 					"numoutlets" : 0,
-					"patching_rect" : [ 88.5, 95.0, 150.0, 20.0 ],
+					"patching_rect" : [ 88.5, 95.0, 150.0, 33.0 ],
 					"style" : "",
-					"text" : "R G B X Y"
+					"text" : "R G B - Werte\n"
 				}
 
 			}
@@ -853,7 +891,7 @@
 					"numoutlets" : 2,
 					"outlettype" : [ "", "bang" ],
 					"parameter_enable" : 0,
-					"patching_rect" : [ 207.0, 125.916626, 50.0, 22.0 ],
+					"patching_rect" : [ 198.0, 136.916626, 50.0, 22.0 ],
 					"style" : ""
 				}
 
@@ -867,7 +905,7 @@
 					"numoutlets" : 2,
 					"outlettype" : [ "", "bang" ],
 					"parameter_enable" : 0,
-					"patching_rect" : [ 133.0, 138.916626, 50.0, 22.0 ],
+					"patching_rect" : [ 133.0, 136.916626, 50.0, 22.0 ],
 					"style" : ""
 				}
 
@@ -881,7 +919,7 @@
 					"numoutlets" : 2,
 					"outlettype" : [ "", "bang" ],
 					"parameter_enable" : 0,
-					"patching_rect" : [ 77.5, 179.916626, 50.0, 22.0 ],
+					"patching_rect" : [ 71.5, 136.916626, 50.0, 22.0 ],
 					"style" : ""
 				}
 
@@ -1038,10 +1076,6 @@
 				"patcherrelativepath" : "../../../../../../../../../../Shared/Max 7/Examples/max-tricks/notes-and-pitch/pitch-to-freq-ratio",
 				"type" : "JSON",
 				"implicit" : 1
-			}
-, 			{
-				"name" : "lcudp-pack.mxo",
-				"type" : "iLaX"
 			}
  ],
 		"autosave" : 0,
