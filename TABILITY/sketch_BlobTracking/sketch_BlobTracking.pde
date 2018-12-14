@@ -12,7 +12,9 @@ OpenCV opencv;
 float r1;
 float g1;
 float b1;
-float r2,b2,g2;
+float r2;
+float g2;
+float b2;
 int count;
 
 // OSC -  Network Communication
@@ -36,7 +38,8 @@ void setup() {
 
   //Create NetworkObj
   osc = new OscP5(this, port);
-  localHostBroadCast = new NetAddress(LocalHost, port);
+  //localHostBroadCast = new NetAddress(LocalHost, port);
+  localHostBroadCast = new NetAddress(ipBoroadCast, port);
 
   // Available Webcams
   String[] cameras = Capture.list();
@@ -78,6 +81,7 @@ void draw() {
   video.loadPixels();
   image(video, 0, 0);
 
+  
 
 
   blobs.clear(); //  don't need this for multiple color blobbing
@@ -125,15 +129,15 @@ void draw() {
 
   // Send RED
   msg = new OscMessage("/null/r2");
-  msg.add(r1);  
+  msg.add(r2);  
   osc.send(msg, localHostBroadCast);
   //Send GREEN
   msg = new OscMessage("/null/g2");
-  msg.add(g1);
+  msg.add(g2);
   osc.send(msg, localHostBroadCast);
   //Send BLUE
   msg = new OscMessage("/null/b2");
-  msg.add(b1);
+  msg.add(b2);
   osc.send(msg, localHostBroadCast);
   //println(r1+" "+ b1 +" "+ g1+" ");
   
@@ -149,6 +153,7 @@ void draw() {
       msg = new OscMessage("/null/1yPos");
       msg.add(b.getY());
       osc.send(msg, localHostBroadCast);
+      //println(b.getY());
     }
   }
 
@@ -189,6 +194,10 @@ void mousePressed() {
   float g1 = green(trackColor);
   float b1 = blue(trackColor);
   println(r1 + " " + g1 + " " + b1);
+}
+
+float returnR(){
+  return r1;
 }
 
 void oscEvent(OscMessage theOscMessage) {
