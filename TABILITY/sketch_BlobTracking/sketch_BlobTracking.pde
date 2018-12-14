@@ -12,6 +12,7 @@ OpenCV opencv;
 float r1;
 float g1;
 float b1;
+float r2,b2,g2;
 int count;
 
 // OSC -  Network Communication
@@ -35,14 +36,16 @@ void setup() {
 
   //Create NetworkObj
   osc = new OscP5(this, port);
-  localHostBroadCast = new NetAddress(ipBoroadCast, port);
+  localHostBroadCast = new NetAddress(LocalHost, port);
 
   // Available Webcams
   String[] cameras = Capture.list();
   printArray(cameras);
 
   //Captured Webcam
-  video = new Capture(this, cameras[112]);
+  //video = new Capture(this, cameras[112]);
+  
+  video = new Capture(this, cameras[17]);
   video.start();
 
   //TargetColor
@@ -70,8 +73,12 @@ void keyPressed() {
 }
 
 void draw() {
+ 
+  
   video.loadPixels();
   image(video, 0, 0);
+
+
 
   blobs.clear(); //  don't need this for multiple color blobbing
 
@@ -82,12 +89,12 @@ void draw() {
       int loc = x + y * video.width;
       // What is current color
       color currentColor = video.pixels[loc];
-      float r1 = red(currentColor);
-      float g1 = green(currentColor);
-      float b1 = blue(currentColor);
-      float r2 = red(trackColor);
-      float g2 = green(trackColor);
-      float b2 = blue(trackColor);
+        r1 = red(currentColor);
+        g1 = green(currentColor);
+        b1 = blue(currentColor);
+        r2 = red(trackColor);
+        g2 = green(trackColor);
+        b2 = blue(trackColor);
 
 
       float d = distSq(r1, g1, b1, r2, g2, b2); 
@@ -110,41 +117,26 @@ void draw() {
       }
     }
   }
-  //println("Red: " + r1 + " Blue: " + b1 + " Green: " + g1);
-  for (int x = 0; x < video.width; x++ ) {
-    for (int y = 0; y < video.height; y++ ) {
 
-      count=0; 
-      // What is current color
-      color currentColor = video.pixels[count];
-      r1 = red(currentColor);
-      g1 = green(currentColor);
-      b1 = blue(currentColor);
-      count++;
-      if (count > (video.width*video.height)) {
-        count = 0;
-      }
-    }
-  }
-  println("Red: " + r1 + " Blue: " + b1 + " Green: " + g1);
+  //println("Red: " + r2 + " Blue: " + b2 + " Green: " + g2);
 
   // OSC zeug
   OscMessage msg = new OscMessage("");
 
   // Send RED
-  msg = new OscMessage("/null/r1");
+  msg = new OscMessage("/null/r2");
   msg.add(r1);  
   osc.send(msg, localHostBroadCast);
   //Send GREEN
-  msg = new OscMessage("/null/g1");
+  msg = new OscMessage("/null/g2");
   msg.add(g1);
   osc.send(msg, localHostBroadCast);
   //Send BLUE
-  msg = new OscMessage("/null/b1");
+  msg = new OscMessage("/null/b2");
   msg.add(b1);
   osc.send(msg, localHostBroadCast);
   //println(r1+" "+ b1 +" "+ g1+" ");
-
+  
   for (Blob b : blobs) {
     if (b.size() > 500) {
       b.show();
@@ -159,8 +151,6 @@ void draw() {
       osc.send(msg, localHostBroadCast);
     }
   }
-
-
 
   //Fenster-Text-Ausgabe
   textAlign(RIGHT);
