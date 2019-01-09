@@ -45,7 +45,7 @@
 					"numoutlets" : 1,
 					"outlettype" : [ "" ],
 					"patching_rect" : [ 418.0, 138.0, 50.0, 22.0 ],
-					"text" : "100"
+					"text" : "86"
 				}
 
 			}
@@ -185,7 +185,7 @@
 					"numoutlets" : 2,
 					"outlettype" : [ "signal", "" ],
 					"parameter_enable" : 0,
-					"patching_rect" : [ 352.5, 98.5, 22.0, 140.0 ]
+					"patching_rect" : [ 352.5, 97.5, 22.0, 140.0 ]
 				}
 
 			}
