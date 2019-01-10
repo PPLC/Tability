@@ -15,6 +15,12 @@ float b1;
 float r2;
 float g2;
 float b2;
+float r3;
+float g3;
+float b3;
+float r4;
+float g4;
+float b4;
 int count;
 
 // OSC -  Network Communication
@@ -28,6 +34,8 @@ String LocalHost = "127.0.0.255";
 
 //BlobDetection Vars
 color trackColor; 
+color trackColor2; 
+color trackColor3; 
 float threshold = 25;
 float distThreshold = 50;
 
@@ -51,8 +59,10 @@ void setup() {
   video = new Capture(this, cameras[17]);
   video.start();
 
-  //TargetColor
-  trackColor = color(255, 0, 0);
+  //tracked Colors without mouse-click
+  trackColor = color(120, 20, 20);
+  trackColor2 = color(180, 150, 20);
+  trackColor3 = color(25, 25, 25);
 }
 
 void captureEvent(Capture video) {
@@ -99,11 +109,19 @@ void draw() {
         r2 = red(trackColor);
         g2 = green(trackColor);
         b2 = blue(trackColor);
+        r3 = red(trackColor2);
+        g3 = green(trackColor2);
+        b3 = blue(trackColor2);
+        r4 = red(trackColor3);
+        g4 = green(trackColor3);
+        b4 = blue(trackColor3);
 
 
-      float d = distSq(r1, g1, b1, r2, g2, b2); 
+      float d1 = distSq(r1, g1, b1, r2, g2, b2); 
+      float d2 = distSq(r1, g1, b1, r3, g3, b3);
+      float d3 = distSq(r1, g1, b1, r4, g4, b4);
 
-      if (d < threshold*threshold) {
+      if (d1 < threshold*threshold || d2 < threshold*threshold || d3 < threshold*threshold) {
 
         boolean found = false;
         for (Blob b : blobs) {
