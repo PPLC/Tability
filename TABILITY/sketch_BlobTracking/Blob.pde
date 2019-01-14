@@ -3,16 +3,24 @@ class Blob {
   float miny;
   float maxx;
   float maxy;
+  //color blobColor;
+  float dsquare;
 
   ArrayList<PVector> points;
 
-  Blob(float x, float y) {
+  Blob(float x, float y,   float d ) {
     minx = x;
     miny = y;
     maxx = x;
     maxy = y;
+    dsquare = d;
     points = new ArrayList<PVector>();
     points.add(new PVector(x, y));
+  }
+
+  public float GetBlobSqr()
+  { 
+    return dsquare;
   }
 
   void show() {
@@ -71,8 +79,6 @@ class Blob {
     return minx;
   }
   float getY() {
-    return miny;
+    return maxy;
   }
-  
-  
 }

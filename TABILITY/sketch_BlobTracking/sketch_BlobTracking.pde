@@ -21,6 +21,7 @@ float b3;
 float r4;
 float g4;
 float b4;
+float r5, g5, b5;
 int count;
 
 // OSC -  Network Communication
@@ -36,6 +37,8 @@ String LocalHost = "127.0.0.255";
 color trackColor; 
 color trackColor2; 
 color trackColor3; 
+color trackColor4; 
+
 float threshold = 25;
 float distThreshold = 50;
 
@@ -46,8 +49,8 @@ void setup() {
 
   //Create NetworkObj
   osc = new OscP5(this, port);
-  //localHostBroadCast = new NetAddress(LocalHost, port);
-  localHostBroadCast = new NetAddress(ipBoroadCast, port);
+  localHostBroadCast = new NetAddress(LocalHost, port);
+  //localHostBroadCast = new NetAddress(ipBoroadCast, port);
 
   // Available Webcams
   String[] cameras = Capture.list();
@@ -55,14 +58,19 @@ void setup() {
 
   //Captured Webcam
   //video = new Capture(this, cameras[112]);
-  
+
   video = new Capture(this, cameras[17]);
   video.start();
 
   //tracked Colors without mouse-click
-  trackColor = color(120, 20, 20);
-  trackColor2 = color(180, 150, 20);
-  trackColor3 = color(25, 25, 25);
+
+  trackColor = color(221, 138, 191);
+
+  trackColor2 = color(43, 97, 156);
+
+  trackColor3 = color(198, 104, 140);
+
+  trackColor4 = color(50, 104, 200);
 }
 
 void captureEvent(Capture video) {
@@ -86,16 +94,15 @@ void keyPressed() {
 }
 
 void draw() {
- 
-  
+
+
   video.loadPixels();
   image(video, 0, 0);
 
-  
+
 
 
   blobs.clear(); //  don't need this for multiple color blobbing
-
 
   // Begin loop to walk through every pixel
   for (int x = 0; x < video.width; x++ ) {
@@ -103,25 +110,32 @@ void draw() {
       int loc = x + y * video.width;
       // What is current color
       color currentColor = video.pixels[loc];
-        r1 = red(currentColor);
-        g1 = green(currentColor);
-        b1 = blue(currentColor);
-        r2 = red(trackColor);
-        g2 = green(trackColor);
-        b2 = blue(trackColor);
-        r3 = red(trackColor2);
-        g3 = green(trackColor2);
-        b3 = blue(trackColor2);
-        r4 = red(trackColor3);
-        g4 = green(trackColor3);
-        b4 = blue(trackColor3);
+      r1 = red(currentColor);
+      g1 = green(currentColor);
+      b1 = blue(currentColor);
+      r2 = red(trackColor);
+      g2 = green(trackColor);
+      b2 = blue(trackColor);
+      r3 = red(trackColor2);
+      g3 = green(trackColor2);
+      b3 = blue(trackColor2);
+      r4 = red(trackColor3);
+      g4 = green(trackColor3);
+      b4 = blue(trackColor3);
+      r5 = red(trackColor4);
+      g5 = green(trackColor4);
+      b5 = blue(trackColor4);
 
 
       float d1 = distSq(r1, g1, b1, r2, g2, b2); 
       float d2 = distSq(r1, g1, b1, r3, g3, b3);
       float d3 = distSq(r1, g1, b1, r4, g4, b4);
+      float d4 = distSq(r1, g1, b1, r5, g5, b5);
 
-      if (d1 < threshold*threshold || d2 < threshold*threshold || d3 < threshold*threshold) {
+      println(d1 + " : " + d2+ " : " + d3+ " : " + d4);
+
+      if (d1 < threshold*threshold || d2 < threshold*threshold || d3 < threshold*threshold || d4 < threshold*threshold) {
+
 
         boolean found = false;
         for (Blob b : blobs) {
@@ -133,12 +147,15 @@ void draw() {
         }
 
         if (!found) {
-          Blob b = new Blob(x, y);
+         
+          Blob b = new Blob(x, y, 1);
           blobs.add(b);
         }
       }
     }
   }
+
+
 
   //println("Red: " + r2 + " Blue: " + b2 + " Green: " + g2);
 
@@ -157,23 +174,85 @@ void draw() {
   msg = new OscMessage("/null/b2");
   msg.add(b2);
   osc.send(msg, localHostBroadCast);
-  //println(r1+" "+ b1 +" "+ g1+" ");
-  
-  for (Blob b : blobs) {
-    if (b.size() > 500) {
-      b.show();
-      // b.getPixel();
-      //Object 1 x POS
-      msg = new OscMessage("/null/1xPos");
-      msg.add(b.getX());
+
+  // Send RED
+  msg = new OscMessage("/null/r3");
+  msg.add(r3);  
+  osc.send(msg, localHostBroadCast);
+  //Send GREEN
+  msg = new OscMessage("/null/g3");
+  msg.add(g3);
+  osc.send(msg, localHostBroadCast);
+  //Send BLUE
+  msg = new OscMessage("/null/b3");
+  msg.add(b3);
+  osc.send(msg, localHostBroadCast);
+
+  // Send RED
+  msg = new OscMessage("/null/r4");
+  msg.add(r4);  
+  osc.send(msg, localHostBroadCast);
+  //Send GREEN
+  msg = new OscMessage("/null/g4");
+  msg.add(g4);
+  osc.send(msg, localHostBroadCast);
+  //Send BLUE
+  msg = new OscMessage("/null/b4");
+  msg.add(b4);
+  osc.send(msg, localHostBroadCast);
+
+  // Send RED
+  msg = new OscMessage("/null/r5");
+  msg.add(r5);  
+  osc.send(msg, localHostBroadCast);
+  //Send GREEN
+  msg = new OscMessage("/null/g5");
+  msg.add(g5);
+  osc.send(msg, localHostBroadCast);
+  //Send BLUE
+  msg = new OscMessage("/null/b5");
+  msg.add(b5);
+  osc.send(msg, localHostBroadCast);
+
+
+  if (blobs.size() > 0)
+  {
+
+    for (int i = 0; i < blobs.size(); i++)
+    {
+      blobs.get(i).show();
+      //println(blobs.get(i).getX());
+      //println(blobs.get(i).getY());
+
+      msg = new OscMessage("/null/"+ i + "xPos");
+      msg.add(blobs.get(i).getX());
       osc.send(msg, localHostBroadCast);
-      //Object 1 y Pos
-      msg = new OscMessage("/null/1yPos");
-      msg.add(b.getY());
+
+      msg = new OscMessage("/null/"+ i + "yPos");
+      msg.add(blobs.get(i).getY());
       osc.send(msg, localHostBroadCast);
-      //println(b.getY());
     }
   }
+
+
+  /*
+
+   for (Blob b : blobs) {
+   if (b.size() > 500) {
+   b.show();
+   // b.getPixel();
+   //Object 1 x POS
+   msg = new OscMessage("/null/1xPos");
+   msg.add(b.getX());
+   osc.send(msg, localHostBroadCast);
+   msg = new OscMessage("/null/1yPos");
+   msg.add(b.getY());
+   osc.send(msg, localHostBroadCast);
+   }
+   }  
+   
+   */
+
 
   //Fenster-Text-Ausgabe
   textAlign(RIGHT);
@@ -214,7 +293,7 @@ void mousePressed() {
   println(r1 + " " + g1 + " " + b1);
 }
 
-float returnR(){
+float returnR() {
   return r1;
 }
 
