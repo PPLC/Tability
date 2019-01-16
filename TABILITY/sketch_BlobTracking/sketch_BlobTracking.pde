@@ -24,12 +24,14 @@ float b4;
 float r5, g5, b5;
 int count;
 
+int startTime;
+
 // OSC -  Network Communication
 OscP5 osc;
 NetAddress localHostBroadCast;
 UDP udpSend;
 
-int port = 7400;
+int port = 7600;
 String ipBoroadCast = "192.168.0.255";
 String LocalHost = "127.0.0.255";
 
@@ -46,6 +48,7 @@ ArrayList<Blob> blobs = new ArrayList<Blob>();
 
 void setup() {
   size(800, 800);
+
 
   //Create NetworkObj
   osc = new OscP5(this, port);
@@ -89,11 +92,24 @@ void keyPressed() {
     threshold-=5;
   }
 
+  if (key == '1') {
+    startTime = millis();
+    println("timer started");
+  } else if (key == '2') {
+    int elapsed = millis() - startTime;
+    println(float(elapsed) / 1000 + " seconds elapsed");
+  }
+
 
   println(distThreshold);
 }
 
+
+
 void draw() {
+
+
+
 
 
   video.loadPixels();
@@ -132,7 +148,7 @@ void draw() {
       float d3 = distSq(r1, g1, b1, r4, g4, b4);
       float d4 = distSq(r1, g1, b1, r5, g5, b5);
 
-      println(d1 + " : " + d2+ " : " + d3+ " : " + d4);
+      // println(d1 + " : " + d2+ " : " + d3+ " : " + d4);
 
       if (d1 < threshold*threshold || d2 < threshold*threshold || d3 < threshold*threshold || d4 < threshold*threshold) {
 
@@ -147,7 +163,7 @@ void draw() {
         }
 
         if (!found) {
-         
+
           Blob b = new Blob(x, y, 1);
           blobs.add(b);
         }
@@ -166,6 +182,8 @@ void draw() {
   msg = new OscMessage("/null/r2");
   msg.add(r2);  
   osc.send(msg, localHostBroadCast);
+  
+  /*
   //Send GREEN
   msg = new OscMessage("/null/g2");
   msg.add(g2);
@@ -174,7 +192,8 @@ void draw() {
   msg = new OscMessage("/null/b2");
   msg.add(b2);
   osc.send(msg, localHostBroadCast);
-
+  */
+/*
   // Send RED
   msg = new OscMessage("/null/r3");
   msg.add(r3);  
@@ -213,8 +232,28 @@ void draw() {
   msg = new OscMessage("/null/b5");
   msg.add(b5);
   osc.send(msg, localHostBroadCast);
+*/
 
-
+/*
+  for (int i = 1; i < 4; i++)
+  {
+    if (blobs.size() != 0) 
+    {
+      if (blobs.get(i) != null)
+      {
+        msg = new OscMessage("/OnOff/" + i );
+        msg.add(1);  
+        osc.send(msg, localHostBroadCast);
+      } else 
+      {
+        msg = new OscMessage("/OnOff/" + i );      
+        msg.add(0);  
+        osc.send(msg, localHostBroadCast);
+      }
+    }
+  }
+*/
+/*
   if (blobs.size() > 0)
   {
 
@@ -234,10 +273,9 @@ void draw() {
     }
   }
 
-
+  */
   /*
-
-   for (Blob b : blobs) {
+  for (Blob b : blobs) {
    if (b.size() > 500) {
    b.show();
    // b.getPixel();
@@ -250,12 +288,10 @@ void draw() {
    osc.send(msg, localHostBroadCast);
    }
    }  
-   
    */
 
-
-  //Fenster-Text-Ausgabe
-  textAlign(RIGHT);
+    //Fenster-Text-Ausgabe
+    textAlign(RIGHT);
   fill(0);
   text("distance threshold: " + distThreshold, width-10, 25);
   text("color threshold: " + threshold, width-10, 50);
@@ -263,6 +299,12 @@ void draw() {
   text(" blue: " + b1, width-10, 100);
   text(" green: " + g1, width-10, 125);
 }
+
+
+void TimeCount(boolean isActive)
+{
+}
+
 
 
 // Custom distance functions w/ no square root for optimization
