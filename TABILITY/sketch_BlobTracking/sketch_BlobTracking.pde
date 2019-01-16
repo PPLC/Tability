@@ -31,7 +31,7 @@ OscP5 osc;
 NetAddress localHostBroadCast;
 UDP udpSend;
 
-int port = 7600;
+int port = 7800;
 String ipBoroadCast = "192.168.0.255";
 String LocalHost = "127.0.0.255";
 
@@ -57,23 +57,22 @@ void setup() {
 
   // Available Webcams
   String[] cameras = Capture.list();
-  printArray(cameras);
+  //printArray(cameras);
 
   //Captured Webcam
   //video = new Capture(this, cameras[112]);
-
   video = new Capture(this, cameras[17]);
   video.start();
 
   //tracked Colors without mouse-click
 
-  trackColor = color(221, 138, 191);
+  trackColor = color(254, 251, 158);
 
-  trackColor2 = color(43, 97, 156);
+  trackColor2 = color(219, 144, 144);
 
-  trackColor3 = color(198, 104, 140);
+  //trackColor3 = color(, , );
 
-  trackColor4 = color(50, 104, 200);
+  trackColor4 = color(123, 134, 205);
 }
 
 void captureEvent(Capture video) {
@@ -107,19 +106,10 @@ void keyPressed() {
 
 
 void draw() {
-
-
-
-
-
   video.loadPixels();
   image(video, 0, 0);
 
-
-
-
   blobs.clear(); //  don't need this for multiple color blobbing
-
   // Begin loop to walk through every pixel
   for (int x = 0; x < video.width; x++ ) {
     for (int y = 0; y < video.height; y++ ) {
@@ -177,13 +167,10 @@ void draw() {
 
   // OSC zeug
   OscMessage msg = new OscMessage("");
-
   // Send RED
   msg = new OscMessage("/null/r2");
   msg.add(r2);  
   osc.send(msg, localHostBroadCast);
-  
-  /*
   //Send GREEN
   msg = new OscMessage("/null/g2");
   msg.add(g2);
@@ -192,8 +179,8 @@ void draw() {
   msg = new OscMessage("/null/b2");
   msg.add(b2);
   osc.send(msg, localHostBroadCast);
-  */
-/*
+
+
   // Send RED
   msg = new OscMessage("/null/r3");
   msg.add(r3);  
@@ -232,31 +219,31 @@ void draw() {
   msg = new OscMessage("/null/b5");
   msg.add(b5);
   osc.send(msg, localHostBroadCast);
-*/
 
-/*
-  for (int i = 1; i < 4; i++)
+
+
+  for (int i = 1; i < blobs.size(); i++)
   {
     if (blobs.size() != 0) 
     {
       if (blobs.get(i) != null)
       {
-        msg = new OscMessage("/OnOff/" + i );
+        msg = new OscMessage("/" + i + "/1" );
         msg.add(1);  
         osc.send(msg, localHostBroadCast);
-      } else 
+      } 
+      else 
       {
-        msg = new OscMessage("/OnOff/" + i );      
+        msg = new OscMessage("/" + i + "/0" );      
         msg.add(0);  
         osc.send(msg, localHostBroadCast);
       }
     }
   }
-*/
-/*
+  
+
   if (blobs.size() > 0)
   {
-
     for (int i = 0; i < blobs.size(); i++)
     {
       blobs.get(i).show();
@@ -273,7 +260,7 @@ void draw() {
     }
   }
 
-  */
+
   /*
   for (Blob b : blobs) {
    if (b.size() > 500) {
@@ -290,8 +277,8 @@ void draw() {
    }  
    */
 
-    //Fenster-Text-Ausgabe
-    textAlign(RIGHT);
+  //Fenster-Text-Ausgabe
+  textAlign(RIGHT);
   fill(0);
   text("distance threshold: " + distThreshold, width-10, 25);
   text("color threshold: " + threshold, width-10, 50);
