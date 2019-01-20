@@ -4,6 +4,18 @@ import hypermedia.net.*;
 import netP5.*;
 import oscP5.*;
 
+import dmxP512.*;
+import processing.serial.*;
+
+//DMX
+DmxP512 dmxOutput;
+int universeSize=512;
+boolean LANBOX=false;
+String LANBOX_IP="192.168.1.77";
+boolean DMXPRO=true;
+String DMXPRO_PORT="COM4";//case matters ! on windows port must be upper cased.
+int DMXPRO_BAUDRATE=115000;
+
 // Video to Capture from Webcam
 Capture video;
 
@@ -29,9 +41,9 @@ int startTime;
 // OSC -  Network Communication
 OscP5 osc;
 NetAddress localHostBroadCast;
-UDP udpSend;
+//UDP udpSend;
 
-int port = 7800;
+int port = 7400;
 String ipBoroadCast = "192.168.0.255";
 String LocalHost = "127.0.0.255";
 
@@ -46,9 +58,23 @@ float distThreshold = 50;
 
 ArrayList<Blob> blobs = new ArrayList<Blob>();
 
+String time = "000";
+int initialTime;
+int interval = 1000;
+
 void setup() {
   size(800, 800);
 
+
+  //DMX Object
+  dmxOutput=new DmxP512(this, universeSize, false);
+  if (LANBOX) {
+    dmxOutput.setupLanbox(LANBOX_IP);
+  }
+
+  if (DMXPRO) {
+    dmxOutput.setupDmxPro(DMXPRO_PORT, DMXPRO_BAUDRATE);
+  }
 
   //Create NetworkObj
   osc = new OscP5(this, port);
@@ -70,9 +96,11 @@ void setup() {
 
   trackColor2 = color(219, 144, 144);
 
-  //trackColor3 = color(, , );
+  trackColor3 = color(22, 28, 65);
 
   trackColor4 = color(123, 134, 205);
+
+  initialTime = millis();
 }
 
 void captureEvent(Capture video) {
@@ -108,6 +136,9 @@ void keyPressed() {
 void draw() {
   video.loadPixels();
   image(video, 0, 0);
+
+
+
 
   blobs.clear(); //  don't need this for multiple color blobbing
   // Begin loop to walk through every pixel
@@ -160,93 +191,126 @@ void draw() {
       }
     }
   }
+  //println("Red: " + r1 + " Blue: " + b1 + " Green: " + g1);
+
+  /*
+      dmxOutput.set(1, 200);
+   dmxOutput.set(2, 200);
+   dmxOutput.set(3, 200);
+   */
+  
+  int CastRed  = int(r1);
+   int CastGreem = int(g1);
+   int CastBlue = int(b1);
+   
+   if (r1 - 40 > g1 | r1 - 40 > b1 )
+   {
+   CastRed = 255;
+   CastGreem = 0;
+   CastBlue = 0;
+   } else if (g1 > r1 | g1 > b1 )
+   {
+   CastRed = 0;
+   CastGreem = 255;
+   CastBlue = 0;
+   } else if (b1 > r1 | b1 > g1 )
+   {  
+   CastRed = 0;
+   CastGreem = 0;
+   CastBlue = 255;
+   }
+   
+   //println(CastRed  +":" +CastGreem+":" +CastBlue);
+   
+  if (blobs.size() > 0 )
+  {
+    if (blobs.get(0) != null) {
+
+      
+      dmxOutput.set(1, CastRed);
+       dmxOutput.set(2, CastGreem);
+       dmxOutput.set(3, CastBlue);
+       /*
+      dmxOutput.set(1, int(red(trackColor)));
+      dmxOutput.set(2, int(green(trackColor)));
+      dmxOutput.set(3, int(blue(trackColor)));
+      */
+    } else {
+      println("CastColor!");
+    }
+  }
 
 
 
-  //println("Red: " + r2 + " Blue: " + b2 + " Green: " + g2);
+
+
+  //println(CastRed);
+
 
   // OSC zeug
   OscMessage msg = new OscMessage("");
+
+  /*
   // Send RED
-  msg = new OscMessage("/null/r2");
-  msg.add(r2);  
-  osc.send(msg, localHostBroadCast);
-  //Send GREEN
-  msg = new OscMessage("/null/g2");
-  msg.add(g2);
-  osc.send(msg, localHostBroadCast);
-  //Send BLUE
-  msg = new OscMessage("/null/b2");
-  msg.add(b2);
-  osc.send(msg, localHostBroadCast);
-
-
-  // Send RED
-  msg = new OscMessage("/null/r3");
-  msg.add(r3);  
-  osc.send(msg, localHostBroadCast);
-  //Send GREEN
-  msg = new OscMessage("/null/g3");
-  msg.add(g3);
-  osc.send(msg, localHostBroadCast);
-  //Send BLUE
-  msg = new OscMessage("/null/b3");
-  msg.add(b3);
-  osc.send(msg, localHostBroadCast);
-
-  // Send RED
-  msg = new OscMessage("/null/r4");
-  msg.add(r4);  
-  osc.send(msg, localHostBroadCast);
-  //Send GREEN
-  msg = new OscMessage("/null/g4");
-  msg.add(g4);
-  osc.send(msg, localHostBroadCast);
-  //Send BLUE
-  msg = new OscMessage("/null/b4");
-  msg.add(b4);
-  osc.send(msg, localHostBroadCast);
-
-  // Send RED
-  msg = new OscMessage("/null/r5");
-  msg.add(r5);  
-  osc.send(msg, localHostBroadCast);
-  //Send GREEN
-  msg = new OscMessage("/null/g5");
-  msg.add(g5);
-  osc.send(msg, localHostBroadCast);
-  //Send BLUE
-  msg = new OscMessage("/null/b5");
-  msg.add(b5);
-  osc.send(msg, localHostBroadCast);
-
-
-
-  for (int i = 1; i < blobs.size(); i++)
-  {
-    if (blobs.size() != 0) 
-    {
-      if (blobs.get(i) != null)
-      {
-        msg = new OscMessage("/" + i + "/1" );
-        msg.add(1);  
-        osc.send(msg, localHostBroadCast);
-      } 
-      else 
-      {
-        msg = new OscMessage("/" + i + "/0" );      
-        msg.add(0);  
-        osc.send(msg, localHostBroadCast);
-      }
-    }
-  }
-  
-
+   msg = new OscMessage("/null/r2");
+   msg.add(r2);  
+   osc.send(msg, localHostBroadCast);
+   //Send GREEN
+   msg = new OscMessage("/null/g2");
+   msg.add(g2);
+   osc.send(msg, localHostBroadCast);
+   //Send BLUE
+   msg = new OscMessage("/null/b2");
+   msg.add(b2);
+   osc.send(msg, localHostBroadCast);
+   
+   
+   // Send RED
+   msg = new OscMessage("/null/r3");
+   msg.add(r3);  
+   osc.send(msg, localHostBroadCast);
+   //Send GREEN
+   msg = new OscMessage("/null/g3");
+   msg.add(g3);
+   osc.send(msg, localHostBroadCast);
+   //Send BLUE
+   msg = new OscMessage("/null/b3");
+   msg.add(b3);
+   osc.send(msg, localHostBroadCast);
+   
+   // Send RED
+   msg = new OscMessage("/null/r4");
+   msg.add(r4);  
+   osc.send(msg, localHostBroadCast);
+   //Send GREEN
+   msg = new OscMessage("/null/g4");
+   msg.add(g4);
+   osc.send(msg, localHostBroadCast);
+   //Send BLUE
+   msg = new OscMessage("/null/b4");
+   msg.add(b4);
+   osc.send(msg, localHostBroadCast);
+   
+   // Send RED
+   msg = new OscMessage("/null/r5");
+   msg.add(r5);  
+   osc.send(msg, localHostBroadCast);
+   //Send GREEN
+   msg = new OscMessage("/null/g5");
+   msg.add(g5);
+   osc.send(msg, localHostBroadCast);
+   //Send BLUE
+   msg = new OscMessage("/null/b5");
+   msg.add(b5);
+   osc.send(msg, localHostBroadCast);
+   */
+/*
   if (blobs.size() > 0)
   {
     for (int i = 0; i < blobs.size(); i++)
     {
-      blobs.get(i).show();
+      //SHOW BLOBS
+      //blobs.get(i).show();
       //println(blobs.get(i).getX());
       //println(blobs.get(i).getY());
 
@@ -259,10 +323,32 @@ void draw() {
       osc.send(msg, localHostBroadCast);
     }
   }
+*/
+  //Geht nur schwer da die Blobs bei jedem Frame gelöscht werden
+  /*
+   for (int i = 1; i < blobs.size(); i++)
+   {
+   if (blobs.size() != 0) 
+   {
+   if (blobs.get(i) != null)
+   {
+   msg = new OscMessage("/" + i + "/1" );
+   msg.add(1);  
+   osc.send(msg, localHostBroadCast);
+   } else 
+   {
+   msg = new OscMessage("/" + i + "/0" );      
+   msg.add(0);  
+   osc.send(msg, localHostBroadCast);
+   }
+   }
+   }
+   
+   */
 
 
   /*
-  for (Blob b : blobs) {
+   for (Blob b : blobs) {
    if (b.size() > 500) {
    b.show();
    // b.getPixel();
@@ -276,21 +362,19 @@ void draw() {
    }
    }  
    */
-
+  /*
   //Fenster-Text-Ausgabe
-  textAlign(RIGHT);
-  fill(0);
-  text("distance threshold: " + distThreshold, width-10, 25);
-  text("color threshold: " + threshold, width-10, 50);
-  text(" red: " + r1, width-10, 75);
-  text(" blue: " + b1, width-10, 100);
-  text(" green: " + g1, width-10, 125);
+   textAlign(RIGHT);
+   fill(0);
+   text("distance threshold: " + distThreshold, width-10, 25);
+   text("color threshold: " + threshold, width-10, 50);
+   text(" red: " + r1, width-10, 75);
+   text(" blue: " + b1, width-10, 100);
+   text(" green: " + g1, width-10, 125);
+   */
 }
 
 
-void TimeCount(boolean isActive)
-{
-}
 
 
 
@@ -329,4 +413,16 @@ float returnR() {
 void oscEvent(OscMessage theOscMessage) {
   float value = theOscMessage.get(0).intValue();
   println(value);
+}
+
+
+void sendDMXColor(int s)
+{
+  switch(s) {
+  case 0: 
+    dmxOutput.set(1, int(red(trackColor)));
+    dmxOutput.set(2, int(green(trackColor)));
+    dmxOutput.set(3, int(blue(trackColor)));
+    break;
+  }
 }
