@@ -54,8 +54,8 @@ color trackColor3;
 color trackColor4; 
 color currentColor;
 
-float threshold = 7;
-float distThreshold = 50;
+float threshold = 5;
+float distThreshold = 80;
 
 ArrayList<Blob> blobs = new ArrayList<Blob>();
 
@@ -94,16 +94,16 @@ void setup() {
   //tracked Colors without mouse-click
 
   //Red
-  trackColor = color(214, 124, 75);
-  
-  //Green
-  trackColor2 = color(173, 179, 129);
-  
-  //Blue
-  trackColor3 = color(130, 156, 191);
+  trackColor = color(202, 117, 62);
 
-//Gelb
-  trackColor4 = color(255, 228, 144);
+  //Green
+  trackColor2 = color(165, 179, 121);
+
+  //Blue
+  trackColor3 = color(122, 157, 179);
+
+  //Gelb
+  trackColor4 = color(245, 223, 134);
 
   initialTime = millis();
 }
@@ -133,7 +133,7 @@ void keyPressed() {
   }
 
 
-  println(threshold);
+  println(distThreshold);
 }
 
 
@@ -206,26 +206,26 @@ void draw() {
 
 
   case 1: 
-    dmxOutput.set(1, int(red(trackColor)));
-    dmxOutput.set(2, int(green(trackColor)));
-    dmxOutput.set(3, int(blue(trackColor)));
+    dmxOutput.set(1, 125);
+    dmxOutput.set(2, 0);
+    dmxOutput.set(3, 0);
     break;
 
   case 2: 
-    dmxOutput.set(1, int(red(trackColor2)));
-    dmxOutput.set(2, int(green(trackColor2)));
-    dmxOutput.set(3, int(blue(trackColor2)));
+    dmxOutput.set(1, 0);
+    dmxOutput.set(2, 125);
+    dmxOutput.set(3, 0);
     break;
 
   case 3: 
-    dmxOutput.set(1, int(red(trackColor3)));
-    dmxOutput.set(2, int(green(trackColor3)));
-    dmxOutput.set(3, int(blue(trackColor3)));
+    dmxOutput.set(1, 0);
+    dmxOutput.set(2, 0);
+    dmxOutput.set(3, 125);
     break;
   case 4: 
-    dmxOutput.set(1, int(red(trackColor4)));
-    dmxOutput.set(2, int(green(trackColor4)));
-    dmxOutput.set(3, int(blue(trackColor4)));
+    dmxOutput.set(1, 125);
+    dmxOutput.set(2, 125);
+    dmxOutput.set(3, 0);
     break;
   }
 
@@ -462,5 +462,32 @@ void sendDMXColor(int s)
     dmxOutput.set(2, int(green(trackColor)));
     dmxOutput.set(3, int(blue(trackColor)));
     break;
+
+    /*
+    
+     case 1: 
+     dmxOutput.set(1, int(red(trackColor)));
+     dmxOutput.set(2, int(green(trackColor)));
+     dmxOutput.set(3, int(blue(trackColor)));
+     break;
+     
+     case 2: 
+     dmxOutput.set(1, int(red(trackColor2)));
+     dmxOutput.set(2, int(green(trackColor2)));
+     dmxOutput.set(3, int(blue(trackColor2)));
+     break;
+     
+     case 3: 
+     dmxOutput.set(1, int(red(trackColor3)));
+     dmxOutput.set(2, int(green(trackColor3)));
+     dmxOutput.set(3, int(blue(trackColor3)));
+     break;
+     case 4: 
+     dmxOutput.set(1, int(red(trackColor4)));
+     dmxOutput.set(2, int(green(trackColor4)));
+     dmxOutput.set(3, int(blue(trackColor4)));
+     break;
+     
+     */
   }
 }
