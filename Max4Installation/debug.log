@@ -21,3 +21,5 @@
 [0116/120500.115:INFO:CONSOLE(1)] "post", source: https://cycling74.com/build.js?v=2.0.50 (1)
 [0116/120500.438:INFO:CONSOLE(1)] "get", source: https://cycling74.com/build.js?v=2.0.50 (1)
 [0116/120539.322:INFO:CONSOLE(0)] "Uncaught (in promise) Timeout", source: https://cycling74.com/auth?inMax=1 (0)
+[0116/135537.453:WARNING:dns_config_service_win.cc(669)] Failed to read DnsConfig.
+[0116/154514.720:WARNING:dns_config_service_win.cc(669)] Failed to read DnsConfig.
