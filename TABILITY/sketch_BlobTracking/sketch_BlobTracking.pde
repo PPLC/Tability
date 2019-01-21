@@ -13,7 +13,7 @@ int universeSize=512;
 boolean LANBOX=false;
 String LANBOX_IP="192.168.1.77";
 boolean DMXPRO=true;
-String DMXPRO_PORT="COM4";//case matters ! on windows port must be upper cased.
+String DMXPRO_PORT="COM5";//case matters ! on windows port must be upper cased.
 int DMXPRO_BAUDRATE=115000;
 
 // Video to Capture from Webcam
@@ -52,8 +52,9 @@ color trackColor;
 color trackColor2; 
 color trackColor3; 
 color trackColor4; 
+color currentColor;
 
-float threshold = 25;
+float threshold = 7;
 float distThreshold = 50;
 
 ArrayList<Blob> blobs = new ArrayList<Blob>();
@@ -92,13 +93,17 @@ void setup() {
 
   //tracked Colors without mouse-click
 
-  trackColor = color(254, 251, 158);
+  //Red
+  trackColor = color(214, 124, 75);
+  
+  //Green
+  trackColor2 = color(173, 179, 129);
+  
+  //Blue
+  trackColor3 = color(130, 156, 191);
 
-  trackColor2 = color(219, 144, 144);
-
-  trackColor3 = color(22, 28, 65);
-
-  trackColor4 = color(123, 134, 205);
+//Gelb
+  trackColor4 = color(255, 228, 144);
 
   initialTime = millis();
 }
@@ -114,9 +119,9 @@ void keyPressed() {
     distThreshold-=5;
   }
   if (key == 's') {
-    threshold+=5;
+    threshold+=1;
   } else if (key == 'x') {
-    threshold-=5;
+    threshold-=1;
   }
 
   if (key == '1') {
@@ -128,7 +133,7 @@ void keyPressed() {
   }
 
 
-  println(distThreshold);
+  println(threshold);
 }
 
 
@@ -146,7 +151,7 @@ void draw() {
     for (int y = 0; y < video.height; y++ ) {
       int loc = x + y * video.width;
       // What is current color
-      color currentColor = video.pixels[loc];
+      currentColor = video.pixels[loc];
       r1 = red(currentColor);
       g1 = green(currentColor);
       b1 = blue(currentColor);
@@ -191,14 +196,47 @@ void draw() {
       }
     }
   }
+
+  switch(blobs.size()) {
+  case 0: 
+    dmxOutput.set(1, int(red(currentColor)));
+    dmxOutput.set(2, int(green(currentColor)));
+    dmxOutput.set(3, int(blue(currentColor)));
+    break;
+
+
+  case 1: 
+    dmxOutput.set(1, int(red(trackColor)));
+    dmxOutput.set(2, int(green(trackColor)));
+    dmxOutput.set(3, int(blue(trackColor)));
+    break;
+
+  case 2: 
+    dmxOutput.set(1, int(red(trackColor2)));
+    dmxOutput.set(2, int(green(trackColor2)));
+    dmxOutput.set(3, int(blue(trackColor2)));
+    break;
+
+  case 3: 
+    dmxOutput.set(1, int(red(trackColor3)));
+    dmxOutput.set(2, int(green(trackColor3)));
+    dmxOutput.set(3, int(blue(trackColor3)));
+    break;
+  case 4: 
+    dmxOutput.set(1, int(red(trackColor4)));
+    dmxOutput.set(2, int(green(trackColor4)));
+    dmxOutput.set(3, int(blue(trackColor4)));
+    break;
+  }
+
   //println("Red: " + r1 + " Blue: " + b1 + " Green: " + g1);
 
   /*
-      dmxOutput.set(1, 200);
-   dmxOutput.set(2, 200);
-   dmxOutput.set(3, 200);
+   dmxOutput.set(1, 0);
+   dmxOutput.set(2, 0);
+   dmxOutput.set(3, 0);
    */
-  
+  /*
   int CastRed  = int(r1);
    int CastGreem = int(g1);
    int CastBlue = int(b1);
@@ -222,24 +260,24 @@ void draw() {
    
    //println(CastRed  +":" +CastGreem+":" +CastBlue);
    
-  if (blobs.size() > 0 )
-  {
-    if (blobs.get(0) != null) {
-
-      
-      dmxOutput.set(1, CastRed);
-       dmxOutput.set(2, CastGreem);
-       dmxOutput.set(3, CastBlue);
-       /*
-      dmxOutput.set(1, int(red(trackColor)));
-      dmxOutput.set(2, int(green(trackColor)));
-      dmxOutput.set(3, int(blue(trackColor)));
-      */
-    } else {
-      println("CastColor!");
-    }
-  }
-
+   if (blobs.size() > 0 )
+   {
+   if (blobs.get(0) != null) {
+   
+   
+   dmxOutput.set(1, CastRed);
+   dmxOutput.set(2, CastGreem);
+   dmxOutput.set(3, CastBlue);
+   
+   dmxOutput.set(1, int(red(trackColor)));
+   dmxOutput.set(2, int(green(trackColor)));
+   dmxOutput.set(3, int(blue(trackColor)));
+   
+   } else {
+   println("CastColor!");
+   }
+   }
+   */
 
 
 
@@ -304,13 +342,13 @@ void draw() {
    msg.add(b5);
    osc.send(msg, localHostBroadCast);
    */
-/*
+
   if (blobs.size() > 0)
   {
     for (int i = 0; i < blobs.size(); i++)
     {
       //SHOW BLOBS
-      //blobs.get(i).show();
+      blobs.get(i).show();
       //println(blobs.get(i).getX());
       //println(blobs.get(i).getY());
 
@@ -323,7 +361,7 @@ void draw() {
       osc.send(msg, localHostBroadCast);
     }
   }
-*/
+
   //Geht nur schwer da die Blobs bei jedem Frame gelöscht werden
   /*
    for (int i = 1; i < blobs.size(); i++)
